@@ -2,8 +2,8 @@ import { create } from "zustand";
 import axios from "axios";
 
 // ------------------- Base URL -------------------
-// Use environment variable if set, fallback to localhost
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
+// Directly use deployed backend URL
+const BASE_URL = "https://full-stack-chat-app-5-4eky.onrender.com";
 
 export const useChatStore = create((set, get) => ({
   users: [],
