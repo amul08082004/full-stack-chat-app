@@ -1,0 +1,29 @@
+/* HomePage.module.css */
+
+.holu {
+  /* 1. Flex container for side-by-side layout on desktop */
+  display: flex;
+  
+  /* 2. Ensure children (Sidebar and ChatContainer) start at the top */
+  align-items: flex-start; 
+  
+  /* 3. Calculate full height below the main Navbar (assuming Navbar is 80px) */
+  min-height: calc(100vh - 80px);
+  width: 100%;
+  overflow: hidden; /* Prevents horizontal scrollbar */
+  background-color:#1e1e1e;
+  position: relative; /* Anchor for fixed/absolute children on mobile */
+}
+
+/* --- Mobile Responsiveness (Screen width up to 768px) --- */
+
+@media (max-width: 768px) {
+  .holu {
+    /* On mobile, we rely on the children (Sidebar and ChatContainer)
+       to be fixed/absolute and take up full screen when needed.
+       The main layout container can simply switch to 'block' 
+       to allow the fixed/absolute positioning of its children to work. */
+    display: block;
+    min-height: auto;
+  }
+}

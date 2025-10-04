@@ -1,0 +1,204 @@
+/* Sidebar.module.css */
+
+/* --- Default/Desktop Styles (Visible, Fixed Size) --- */
+
+.sidebar {
+  /* Dark Theme Base */
+  width: 320px;
+  min-width: 320px;
+  background-color: #1e1e1e; /* Deep Charcoal Panel Color */
+  height: calc(100vh - 80px); /* Assuming Navbar is 80px */
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #363636;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4); 
+  position: sticky; /* Keeps it locked under the Navbar */
+  top: 80px; 
+  z-index: 50; 
+  transition: transform 0.3s ease-in-out; 
+}
+
+/* Backdrop & Hamburger are hidden on desktop */
+.backdrop, .hamburger {
+  display: none; 
+}
+
+.header {
+  padding: 1.5rem 1.2rem;
+  background-color: #242424; /* Header background */
+  border-bottom: 1px solid #363636;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  color: #e0e0e0; /* Light text */
+  font-weight: 700;
+}
+
+/* User List & Scrollbar */
+.userList {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 0; 
+  scrollbar-width: thin;
+  scrollbar-color: #444444 #1e1e1e;
+}
+.userList::-webkit-scrollbar {
+  width: 8px;
+}
+.userList::-webkit-scrollbar-thumb {
+  background-color: #444444; 
+  border-radius: 10px;
+}
+
+/* User Card Effects */
+.userCard {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  cursor: pointer;
+  border-bottom: 1px solid #2e2e2e;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.userCard:hover {
+  background-color: #2a2a2a; /* Darker shade hover */
+  transform: translateX(3px); /* Subtle slide effect */
+}
+
+/* Selected User Card Highlight */
+.selected {
+  background-color: #2c3a45; /* Dark blue background for selection */
+  border-left: 5px solid #00bcd4; /* Vibrant Cyan accent */
+  font-weight: 600;
+  box-shadow: inset 0 0 10px rgba(0, 188, 212, 0.15); 
+}
+
+.avatar {
+  width: 55px; 
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #444444;
+}
+
+/* Online Indicator with Pulse Effect */
+/* Sidebar.module.css (Fixing Online Indicator Position) */
+
+/* ... (Your existing CSS up to .avatarWrapper remains the same) ... */
+
+/* Online Indicator with Pulse Effect */
+.onlineIndicator {
+ 
+   position:relative;
+   left:150px;
+   bottom:30px;
+  width: 14px;
+  height: 14px;
+  background-color: #4caf50; /* Vibrant Green */
+  border-radius: 50%;
+  border: 3px solid #1e1e1e; /* Border matches panel background */
+  animation: pulse 1.5s infinite;
+}
+.onlineIndicator p{
+  color:green;
+  position:relative;
+  left:16px;
+  font-weight:700;
+}
+
+/* ... (Rest of the CSS remains the same) ... */
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+}
+
+.userName {
+  font-weight: 700;
+  color: #e0e0e0;
+}
+
+.status {
+  font-size: 0.9rem;
+  color: #a0a0a0;
+}
+
+/* --- Mobile/Tablet Responsiveness (Max width 992px) --- */
+
+@media (max-width: 992px) {
+  /* Sidebar Mobile Positioning */
+  .sidebar {
+    position: fixed; /* Takes it out of the normal document flow */
+    left: 0;
+    top: 0; /* Aligns to the very top */
+    width: 280px; /* Slightly narrower on mobile */
+    min-width: unset;
+    height: 100vh; /* Full screen height */
+    z-index: 1000; /* High z-index to cover everything */
+    transform: translateX(-100%); /* HIDE OFF-SCREEN TO THE LEFT */
+    background-color: #1e1e1e;
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.7);
+  }
+
+  /* When the 'open' class is applied (via state in JSX) */
+  .open {
+    transform: translateX(0); /* SLIDES INTO VIEW */
+  }
+
+  /* Hamburger Menu Button (Shown on mobile) */
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 30px;
+    background: #00bcd4; /* Accent color background */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 8px;
+    position: fixed; 
+    top: 90px; /* Position it below the Navbar */
+    left: 20px;
+    z-index: 1001; /* Above the sidebar */
+    box-shadow: 0 0 15px rgba(0, 188, 212, 0.4);
+  }
+
+  .hamburger span {
+    width: 100%;
+    height: 3px;
+    background-color: white; /* White lines on accent background */
+    border-radius: 1px;
+    transition: all 0.3s linear;
+    transform-origin: 1px;
+  }
+  
+  /* Backdrop Style (Shown on mobile) */
+  .backdrop {
+    display: block; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75); /* Darker, more opaque backdrop */
+    z-index: 999; /* Below the sidebar, above chat container */
+  }
+
+  /* Hamburger to X animation when open */
+  .hamburgerOpen span:nth-child(1) {
+    transform: translateY(11px) rotate(45deg);
+  }
+
+  .hamburgerOpen span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburgerOpen span:nth-child(3) {
+    transform: translateY(-11px) rotate(-45deg);
+  }
+}

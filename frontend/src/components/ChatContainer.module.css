@@ -1,0 +1,196 @@
+/* ChatContainer.module.css */
+
+/* --- Default/Desktop Styles (Takes up remaining horizontal space) --- */
+
+.container {
+  /* Layout */
+  flex-grow: 1; 
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 80px); /* Adjust for the Navbar height */
+  overflow: hidden;
+
+  /* Dark Theme Aesthetics */
+  background-color: #1e1e1e; /* Deep Charcoal Background */
+  background-image: radial-gradient(#2c2c2c 1px, transparent 1px); /* Subtle pattern */
+  background-size: 20px 20px;
+}
+.messageImage{
+  height:250px;
+  width:250px;
+}
+/* No Chat Selected State (Welcome screen) */
+.noChatSelected {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  color: #a0a0a0;
+}
+
+.noChatSelected h2 {
+  font-size: 2.5rem; /* Bigger welcome text */
+  margin-bottom: 0.5rem;
+  color: #e0e0e0;
+}
+
+.noChatSelected p {
+  font-size: 1.2rem;
+  /* Cool Effect: Gradient text */
+  background: -webkit-linear-gradient(45deg, #00bcd4, #4dd0e1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Chat Header - Compacted and Dark */
+.chatHeader {
+  padding: 0.75rem 1.5rem; /* Compact vertical padding */
+  border-bottom: 1px solid #363636;
+  background-color: #242424; /* Header background */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  min-height: 30px; 
+  display: flex;
+  align-items: center;
+}
+
+.chatHeader h3 {
+  margin: 0;
+  font-size: 1.1rem; 
+  color: #e0e0e0;
+}
+
+/* Message Display Area */
+.messageContainer {
+  flex-grow: 1;
+  padding: 1.5rem; /* More padding for spacious chat */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px; 
+  /* Scrollbar styling for a dark theme */
+  scrollbar-width: thin;
+  scrollbar-color: #444444 #1e1e1e;
+}
+
+.loading, .noMessages {
+  text-align: center;
+  padding: 2rem;
+  color: #a0a0a0;
+  font-style: italic;
+}
+
+/* Message Bubble Styling */
+.messageBubble {
+  max-width: 60%; 
+  padding: 0.8rem 1.1rem;
+  border-radius: 20px;
+  line-height: 1.5;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+  transition: transform 0.1s;
+}
+.messageBubble:hover {
+    transform: scale(1.01); /* Subtle hover lift */
+}
+
+/* Sender (My) Messages - Vibrant Accent */
+.sender {
+  align-self: flex-end; 
+  background-color: #00bcd4; /* Bright Cyan Accent */
+  color: #121212; /* Dark text on bright bubble */
+  border-bottom-right-radius: 6px; /* Corner tail */
+}
+
+/* Receiver Messages - Subtle Contrast */
+.receiver {
+  align-self: flex-start; 
+  background-color: #363636; /* Medium Dark Gray */
+  color: #e0e0e0;
+  border-bottom-left-radius: 6px; /* Corner tail */
+}
+
+.uploading {
+  padding: 0.5rem 1.5rem;
+  text-align: right;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: #00bcd4;
+}
+
+/* Input/Form Area */
+.inputContainer {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #242424;
+  border-top: 1px solid #363636;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3); /* Shadow for separation */
+}
+
+.inputContainer input[type="text"] {
+  flex-grow: 1;
+  padding: 0.8rem 1rem;
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border: 1px solid #444444;
+  border-radius: 25px;
+  margin: 0 10px;
+  font-size: 1rem;
+}
+
+.inputContainer input[type="text"]:focus {
+  outline: none;
+  border-color: #00bcd4;
+  box-shadow: 0 0 5px rgba(0, 188, 212, 0.6);
+}
+
+.inputContainer button {
+  background: #00bcd4;
+  color: #121212;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 1.5rem;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.inputContainer button:hover:not(:disabled) {
+  background: #00acc1;
+  transform: scale(1.05);
+}
+
+.imageUploadLabel {
+  width: 45px;
+  height: 45px;
+  color: #00bcd4;
+  font-size: 1.8rem;
+}
+
+.previewImage {
+  width: 45px;
+  height: 45px;
+  border: 2px solid #00bcd4;
+}
+
+
+/* --- Mobile/Tablet Responsiveness (Screen width up to 992px) --- */
+
+@media (max-width: 992px) {
+  .container {
+    /* CRUCIAL FIX for the "white space" and mobile coverage */
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 500; /* Must sit above the main layout, below the sliding sidebar */
+  }
+
+  /* Make message bubbles take up more screen width */
+  .messageBubble {
+    max-width: 85%; 
+  }
+}
