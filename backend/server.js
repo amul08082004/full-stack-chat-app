@@ -12,7 +12,6 @@ const app = express();
 const server = http.createServer(app);
 
 // ----------------- Fix __dirname -----------------
-// Only define __dirname if not already defined
 const __dirnameFixed = typeof __dirname === "undefined" ? path.resolve() : __dirname;
 
 // ----------------- Middleware -----------------
@@ -21,7 +20,7 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:5173", // update this for production if needed
     credentials: true,
   })
 );
@@ -69,7 +68,8 @@ io.on("connection", (socket) => {
 // ----------------- Production -----------------
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirnameFixed, "../frontend/dist")));
-  app.get("*", (req, res) =>
+  // Fix catch-all route for Render
+  app.get("/*", (req, res) =>
     res.sendFile(path.join(__dirnameFixed, "../frontend/dist/index.html"))
   );
 }
