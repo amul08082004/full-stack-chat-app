@@ -1,17 +1,20 @@
+// ----------------- Imports -----------------
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
+
 const authRoutes = require("./routes/auth.js");
 const messageRoutes = require("./routes/message.js");
 const connectDB = require("./lib/db.js");
 
+// ----------------- App & Server -----------------
 const app = express();
 const server = http.createServer(app);
 
-// ----------------- Fix __dirname -----------------
+// ----------------- Fix __dirname for CommonJS -----------------
 const __dirnameFixed = typeof __dirname === "undefined" ? path.resolve() : __dirname;
 
 // ----------------- Middleware -----------------
@@ -20,7 +23,7 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173", // update this for production if needed
+    origin: "http://localhost:5173", // adjust in production if needed
     credentials: true,
   })
 );
@@ -40,6 +43,7 @@ let userIdMap = {};
 io.on("connection", (socket) => {
   console.log("New client connected:", socket.id);
 
+  // Join event
   socket.on("join", ({ userId }) => {
     console.log(`User joined: ${userId} (socket: ${socket.id})`);
     if (!userIdMap[userId]) userIdMap[userId] = [];
@@ -48,12 +52,14 @@ io.on("connection", (socket) => {
     io.emit("onlineusers", onlineUsers);
   });
 
+  // Send message event
   socket.on("send", ({ senderId, receiverId, text, image }) => {
     (userIdMap[receiverId] || []).forEach((sockId) => {
       io.to(sockId).emit("receive", { senderId, receiverId, text, image });
     });
   });
 
+  // Disconnect event
   socket.on("disconnect", () => {
     console.log("Client disconnected:", socket.id);
     onlineUsers = onlineUsers.filter((u) => u.socketId !== socket.id);
@@ -67,17 +73,27 @@ io.on("connection", (socket) => {
 
 // ----------------- Production -----------------
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirnameFixed, "../frontend/dist")));
-  // Fix catch-all route for Render
-  app.get("/*", (req, res) =>
-    res.sendFile(path.join(__dirnameFixed, "../frontend/dist/index.html"))
-  );
+  const frontendPath = path.join(__dirnameFixed, "../frontend/dist");
+
+  // Serve static files
+  app.use(express.static(frontendPath));
+
+  // Catch-all route for frontend (skip API)
+  app.get("*", (req, res, next) => {
+    if (req.path.startsWith("/api")) return next();
+    res.sendFile(path.join(frontendPath, "index.html"));
+  });
 }
 
 // ----------------- Start Server -----------------
 const PORT = process.env.PORT || 5001;
+
 connectDB()
-  .then(() => server.listen(PORT, () => console.log("Server running on port", PORT)))
+  .then(() => {
+    server.listen(PORT, () => {
+      console.log("Server running on port", PORT);
+    });
+  })
   .catch((err) => {
     console.error("DB connection failed:", err);
     process.exit(1);
